@@ -21,5 +21,7 @@ export default function plugin() {
     bus.on('todo:toggle', (x, force) => todos.toggle(x, force));
     bus.on('todo:title', (x, title) => todos.title(x, title));
     bus.on('todo:remove', x => todos.remove(x));
+
+    bus.on('todo:moveUp', id => todos.moveUp(id));
   };
 };

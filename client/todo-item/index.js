@@ -23,6 +23,19 @@ function render({ props, state }, setState) {
   let { id, completed, title } = todo;
   var classes = { completed, editing };
 
+  let dragStartPos;
+
+  function dragmove(e) {
+    //console.log('drag move');
+    if (e.clientY > dragStartPos + 30) {
+      //console.log('moved down');
+      bus.emit('todo:moveDown', id);
+    } else if (e.clientY < dragStartPos - 30) {
+      //console.log('moved up');
+      bus.emit('todo:moveUp', id);
+    }
+  }
+
   function destroy() {
     bus.emit('todo:remove', id);
   }
@@ -61,9 +74,20 @@ function render({ props, state }, setState) {
     }
   }
 
+  function startDragging(e) {
+    //console.log('started dragging', e);
+    dragStartPos = e.clientY;
+    //document.body.addEventListener('mousemove', dragmove);
+  }
+  
+  function stopDragging(e) {
+    //console.log('stopped dragging', e);
+    //document.body.removeEventListener('mousemove', dragmove);
+  }
+
   return (
     <li class={classes}>
-      <div class="view" onDoubleClick={edit}>
+      <div class="view" onDoubleClick={edit} onDragStart={startDragging} onDragEnd={stopDragging} onDrag={dragmove} draggable="true">
         <input class="toggle" type="checkbox" checked={completed} onChange={toggle} />
         <label>{title}</label>
         <button class="destroy" onClick={destroy}></button>

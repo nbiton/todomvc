@@ -10,10 +10,20 @@ const DEFAULTS = [
   { id: 1, title: 'Buy a unicorn' }
 ];
 
+let counter = 0;
+
 export default class Todos extends Emitter {
   constructor() {
     super();
-    this.list = this.load();
+    this.list = this.load().map(todo => {
+      if (todo.id) {
+        return todo;
+      }
+
+      todo.id = ++counter;
+
+      return todo;
+    });
     this.store();
   }
 
@@ -87,5 +97,19 @@ export default class Todos extends Emitter {
   clear() {
     this.list = this.list.filter(todo => !todo.completed);
     this.store();
+  }
+  
+  moveUp(id) {
+    var item = this.list.filter(todo => id === todo.id);
+    var itemInd = this.list.indexOf(item);
+
+    this.list.splice(itemInd, 1);
+    this.list.splice(itemInd - 1, 0, item);
+
+    this.store();
+  }
+  
+  moveDown(id) {
+    
   }
 }
