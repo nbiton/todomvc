@@ -100,7 +100,7 @@ export default class Todos extends Emitter {
   }
   
   moveUp(id) {
-    var item = this.list.filter(todo => id === todo.id);
+    var item = this.list.filter(todo => id === todo.id)[0];
     var itemInd = this.list.indexOf(item);
 
     this.list.splice(itemInd, 1);
@@ -110,6 +110,9 @@ export default class Todos extends Emitter {
   }
   
   moveDown(id) {
-    
+    var item = this.list.filter(todo => id === todo.id);
+    var itemInd = this.list.indexOf(item);
+
+
   }
 }
